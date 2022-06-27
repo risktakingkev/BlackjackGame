@@ -1,0 +1,65 @@
+
+
+/**
+ * The Class Deck represents a deck of cards
+ * @author 
+ */
+public class Deck extends CardList {
+
+	/**
+	 * The Constant RANKS for all ranks.
+	 */
+	private static final char[] RANKS = { 'A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K' };
+	
+	/**
+	 * The Constant SUITS for all suits.
+	 */
+	private static final char[] SUITS = { 'H', 'S', 'D', 'C' };
+	
+	/**
+	 * The Constant PRIMARY_VALUES for primary values of cards.
+	 */
+	private static final int[] PRIMARY_VALUES = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10 };
+	
+	/**
+	 * The Constant SECONDARY_VALUES for secondary values of cards.
+	 */
+	private static final int[] SECONDARY_VALUES = { 10, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10 };
+
+	/**
+	 * Instantiates a new deck of 52 cards
+	 */
+	public Deck() {
+		reset();
+	}
+
+	/**
+	 * Reset the card to initial state of 52 cards
+	 */
+	public void reset() {
+		clear();
+		for (int iRank = 0; iRank < RANKS.length; iRank++) {
+			for (int iSuit = 0; iSuit < SUITS.length; iSuit++) {
+				Card card = new Card(SUITS[iSuit], RANKS[iRank], PRIMARY_VALUES[iRank], SECONDARY_VALUES[iRank]);
+				card.hide();
+				addCard(card);
+			}
+		}
+	}
+
+	/**
+	 * Deal a card from end of list
+	 *
+	 * @param show if card needs to shown or hidden
+	 * @return the card dealt
+	 */
+	public Card deal(boolean show) {
+		Card dealt = cards.remove(cards.size() - 1);
+		if (show)
+			dealt.show();
+		else
+			dealt.hide();
+		return dealt;
+	}
+
+}
