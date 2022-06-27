@@ -1,0 +1,224 @@
+
+import java.util.Scanner;
+
+/**
+ * The Class BlackJackGame encapsulates everything needed for the Blackjack game.
+ * @author
+ */
+public class BlackJackGame {
+
+	/**
+	 * The scanner to read from user
+	 */
+	private static Scanner scanner = new Scanner(System.in);
+
+	/**
+	 * The default bank for the player at start
+	 */
+	private final int DEFAULT_BANK = 150;
+
+	/**
+	 * The deck.
+	 */
+	private Deck deck;
+	
+	/**
+	 * The player hand.
+	 */
+	private Hand playerHand;
+	
+	/**
+	 * The dealer hand.
+	 */
+	private Hand dealerHand;
+	
+	/**
+	 * The player bank.
+	 */
+	private int playerBank;
+	
+	/**
+	 * The bet amount.
+	 */
+	private int betAmount;
+
+	/**
+	 * Instantiates a new black jack game.
+	 */
+	public BlackJackGame() {
+		deck = new Deck();
+		playerHand = new Hand();
+		dealerHand = new Hand();
+		playerBank = DEFAULT_BANK;
+	}
+
+	
+
+	/**
+	 * Reset both hands
+	 */
+	private void reset() {
+		playerHand.clear();
+		dealerHand.clear();
+	}
+
+	/**
+	 * Play the game until the user quits or has no money left to bet
+	 */
+	public void play() {
+		while (playerBank > 0) { // while player has money left to bet
+
+			// display bank and bet amount
+			System.out.println("\n-- Current stats --");
+			System.out.println("Player bank: $" + playerBank);
+			System.out.println("-------------------");
+
+			// play one game
+			System.out.println("\n******************************************************************\n");
+			playOneGame();
+			System.out.println("\n******************************************************************\n");
+
+			// if can play next game
+			if (playerBank > 0) {
+				System.out.print("Press enter to play next game or exit to quit: ");
+				String choice = scanner.nextLine();
+				if(choice.equalsIgnoreCase("exit"))
+					break;
+			}
+		}
+	}
+
+	/**
+	 * Play one game of blackjack
+	 */
+	private void playOneGame() {
+		
+		System.out.println("Enter bet amount between 0 and " +playerBank+": ");
+		betAmount = scanner.nextInt();
+		
+		// Reset if needed
+		deck.reset();
+
+		// shuffle before start of game
+		deck.shuffle();
+
+		// reset hands
+		reset();
+
+		// deal 2 cards each
+		playerHand.addCard(deck.deal(true));
+		dealerHand.addCard(deck.deal(true));
+		playerHand.addCard(deck.deal(true));
+		dealerHand.addCard(deck.deal(false));
+
+		// display hands
+		printHand(false);
+		System.out.println();
+		printHand(true);
+
+		// display current total
+		System.out.println("\n - Current total for player: " + playerHand.getBestTotal());
+
+		// while player can play
+		while (playerHand.getBestTotal() < 21) {
+			// hit or stand
+			System.out.println();
+			System.out.print("1. Hit 2. Stand? ");
+			int choice = scanner.nextInt();
+			scanner.nextLine();
+			if (choice == 2) { // stand
+				break;
+			} else { // hit
+
+				// deal card and print and add to hand
+				Card card = deck.deal(true);
+				System.out.println("\nDealt card: " + card);
+				System.out.println();
+				playerHand.addCard(card);
+
+				// show updated
+				printHand(false);
+				System.out.println(" - Current Total for player: " + playerHand.getBestTotal());
+			}
+		}
+
+		
+
+		// iif player hasnt busted
+		if (playerHand.getBestTotal() <= 21) {
+			System.out.println("\nPress enter to let dealer play: ");
+			scanner.nextLine();
+			
+			// show delaer hand
+			dealerHand.showCard(1);
+			
+			
+			System.out.println();
+			// show dealer hand
+			printHand(true);
+			System.out.println(" - Current total for dealer: " + dealerHand.getBestTotal());
+
+			// while delaer has less than 17
+			while (dealerHand.getBestTotal() < 17) {
+				// deal
+				Card card = deck.deal(true);
+				System.out.println("\nDealt card: " + card);
+				dealerHand.addCard(card);
+				System.out.println();
+				printHand(true);
+				System.out.println(" - Current total for dealer: " + dealerHand.getBestTotal());
+				System.out.println();
+			}
+		}
+		
+		System.out.println("\n");
+		
+		System.out.println("Press enter to see result: ");
+		scanner.nextLine();
+		
+		result();
+
+	}
+	
+	/**
+	 * Prints the hand.
+	 *
+	 * @param dealer if hand is dealer or players
+	 */
+	private void printHand(boolean dealer){
+		System.out.printf("-------------- %s's Hand --------------\n", dealer ? "Dealer" : "Player");
+		if(dealer)
+			System.out.println(dealerHand);
+		else
+			System.out.println(playerHand);
+		System.out.println("-------------------------------------------");
+	}
+
+	/**
+	 * calculates and prints the result
+	 */
+	private void result() {
+		// get total
+		int playerTotal = playerHand.getBestTotal();
+		int dealerTotal = dealerHand.getBestTotal();
+
+		if (playerTotal > 21) { //player busted
+			System.out.println("You busted. Dealer wins.");
+			playerBank -= betAmount;
+		} else if (playerTotal == 21 & dealerTotal != 21) { //player blackjack and dealer hasn't
+			System.out.println("You got blackjack. You win");
+			playerBank += betAmount;
+		} else if (dealerTotal > 21) { //dealer busted
+			System.out.println("Dealer busted. You win.");
+			playerBank += betAmount;
+		} else if (playerTotal < dealerTotal) { //player has less 
+			System.out.println("Dealer has more score than you. Dealer wins");
+			playerBank -= betAmount;
+		} else if (playerTotal > dealerTotal) { //player has more
+			System.out.println("You have more score than delaer. You win");
+			playerBank += betAmount;
+		} else //equal
+			System.out.println("Its a tie!");
+	}
+
+}
