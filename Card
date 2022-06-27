@@ -1,0 +1,113 @@
+
+/**
+ * The Class Card represent the card
+ * @author
+ */
+public class Card {
+
+	/**
+	 * The rank.
+	 */
+	private final char rank;
+
+	/**
+	 * The suit.
+	 */
+	private final char suit;
+
+	/**
+	 * The primary value.
+	 */
+	private final int primaryValue;
+
+	/**
+	 * The secondary value.
+	 */
+	private final int secondaryValue;
+
+	/**
+	 * True means card is shown otherwise hidden
+	 */
+	private boolean show;
+
+	/**
+	 * Instantiates a new card.
+	 *
+	 * @param suit           the suit
+	 * @param rank           the rank
+	 * @param primaryValue   the primary value
+	 * @param secondaryValue the secondary value
+	 */
+	public Card(char suit, char rank, int primaryValue, int secondaryValue) {
+		this.rank = rank;
+		this.suit = suit;
+		this.primaryValue = primaryValue;
+		this.secondaryValue = secondaryValue;
+		show = false;
+	}
+
+
+	/**
+	 * Gets the rank.
+	 *
+	 * @return the rank
+	 */
+	public char getRank() {
+		return rank;
+	}
+
+	/**
+	 * Gets the suit.
+	 *
+	 * @return the suit
+	 */
+	public char getSuit() {
+		return suit;
+	}
+
+	/**
+	 * Gets the primary value.
+	 *
+	 * @return the primary value
+	 */
+	public int getPrimaryValue() {
+		return primaryValue;
+	}
+
+	/**
+	 * Gets the secondary value.
+	 *
+	 * @return the secondary value
+	 */
+	public int getSecondaryValue() {
+		return secondaryValue;
+	}
+
+	/**
+	 * Show.
+	 */
+	public void show() {
+		show = true;
+	}
+
+	/**
+	 * Hide.
+	 */
+	public void hide() {
+		show = false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		if (show) // show card
+			return String.format("%s%s", rank, suit);
+		else // card hidden
+			return String.format("%s%s", "X", "X");
+	}
+
+}
