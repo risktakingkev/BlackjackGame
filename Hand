@@ -1,0 +1,52 @@
+/**
+ * The Class Hand represents a hand in blackjack game.
+ * @author 
+ */
+public class Hand extends CardList {
+
+	/**
+	 * Gets the best total close to the 21 mark.
+	 *
+	 * @return the best total
+	 */
+	public int getBestTotal() {
+		int aces = countAces(); // count aces
+		// count maximum total
+		int total = totalWithoutAces() + countAces() * 11;
+
+		// for each ace
+		for (int i = 0; i < aces; i++) {
+			if (total > 21) // if total is more than 21
+				total -= 10; // subtract 10 (secondary value of ace - primary value of ace)
+		}
+		return total;
+	}
+
+	/**
+	 * Count aces.
+	 *
+	 * @return the aces
+	 */
+	private int countAces() {
+		int total = 0;
+		for (int i = 0; i < cards.size(); i++) {
+			if (cards.get(i).getRank() == 'A')
+				total++;
+		}
+		return total;
+	}
+
+	/**
+	 * Total of cards without aces.
+	 *
+	 * @return the total
+	 */
+	private int totalWithoutAces() {
+		int total = 0;
+		for (int i = 0; i < cards.size(); i++) {
+			if (cards.get(i).getRank() != 'A')
+				total += cards.get(i).getPrimaryValue();
+		}
+		return total;
+	}
+}
