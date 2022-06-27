@@ -1,0 +1,100 @@
+
+import java.util.ArrayList;
+import java.util.Random;
+
+/**
+ * The Class CardList is used to represent the list of cards and forms the base class for hand and deck
+ * @author 
+ */
+public abstract class CardList {
+
+	/**
+	 * The cards.
+	 */
+	protected ArrayList<Card> cards;
+
+	/**
+	 * Instantiates a new card list.
+	 */
+	public CardList() {
+		cards = new ArrayList<>();
+	}
+
+	/**
+	 * Adds the card.
+	 *
+	 * @param card the card to add
+	 */
+	public void addCard(Card card) {
+		cards.add(card);
+	}
+
+	/**
+	 * Clear the list
+	 */
+	public void clear() {
+		cards.clear();
+	}
+
+	/**
+	 * Gets total cards.
+	 *
+	 * @return total cards
+	 */
+	public int getNumCards() {
+		return cards.size();
+	}
+
+	/**
+	 * Shows the string representation of the hand
+	 */
+	public String toString() {
+		String out = "";
+		for (int i = 0; i < cards.size(); i++) {
+			out += cards.get(i).toString();
+			if (i != cards.size() - 1)
+				out += "\n";
+		}
+		return out;
+	}
+
+	/**
+	 * Show card.
+	 *
+	 * @param index the index
+	 */
+	public void showCard(int index) {
+		cards.get(index).hide();
+	}
+
+	/**
+	 * Hide card.
+	 *
+	 * @param index the index
+	 */
+	public void hideCard(int index) {
+		cards.get(index).hide();
+	}
+
+	/**
+	 * Shuffle cards
+	 */
+	public void shuffle() {
+		Random random = new Random();
+		for (int i = 0; i < 3; i++) { // 3 rounds
+
+			// for each card
+			for (int j = 0; j < cards.size(); j++) {
+				int x = random.nextInt(cards.size()); // generate number to swap with
+
+				// if different swap cards
+				if (x != j) {
+					Card temp = cards.get(x);
+					cards.set(x, cards.get(j));
+					cards.set(j, temp);
+				}
+			}
+		}
+	}
+
+}
