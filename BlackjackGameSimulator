@@ -1,0 +1,25 @@
+import java.util.Scanner;
+
+/**
+ * The Class BlackjackGameSimulator is the main class for the application to play the blackjack game
+ */
+public class BlackjackGameSimulator {
+
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
+	public static void main(String[] args) {
+		//create game
+		BlackJackGame blackJackGame = new BlackJackGame();
+		Scanner scanner = new Scanner(System.in);
+	
+		
+		
+		//play game
+		blackJackGame.play();
+		
+		scanner.close();
+	}
+}
